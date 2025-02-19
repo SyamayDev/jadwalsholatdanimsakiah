@@ -364,7 +364,7 @@
       const cityName = citySelect.options[citySelect.selectedIndex]?.text || "";
       const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
       const monthName = months[parseInt(month) - 1];
-      document.getElementById("selectedInfo").textContent = `Jadwal Sholat untuk ${cityName} Bulan ${monthName} Tahun ${year}`;
+      document.getElementById("selectedInfo").textContent = `Jadwal Sholat untuk ${cityName} dan Sekitarnya Bulan ${monthName} Tahun ${year}`;
       if (year && month && cityId) {
         await fetchPrayerTimes(cityId, year, month);
       }
