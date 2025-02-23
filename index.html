@@ -8,7 +8,6 @@
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
   <style>
-    /* Existing CSS Variables and Global Styles (unchanged) */
     :root {
       --bg-color: #f0f4f8;
       --text-color: #212529;
@@ -64,7 +63,6 @@
       100% { background: linear-gradient(45deg, var(--bg-color), #1e1e1e); }
     }
 
-    /* Header Section (enhanced with animation) */
     .header-section {
       padding: 2rem;
       margin-bottom: 2rem;
@@ -1004,7 +1002,7 @@
                 }
                 if (prayer === "Imsak") {
                   imsakAudio.play().catch(error => console.error("Error playing imsak audio:", error));
-                  document.getElementById("adhanNotification").textContent = "Waktu Imsak Telah Tiba";
+                  document.getElementById("adhanNotification").textContent = "Waktu imsak telah tiba, menandakan dimulainya ibadah puasa kita hari ini. Saatnya menahan diri dari makan, minum, serta segala hal yang dapat membatalkan puasa. Namun, lebih dari sekadar menahan lapar dan dahaga, puasa juga mengajarkan kita untuk menjaga lisan, menahan amarah, memperbanyak doa, dan meningkatkan ibadah kepada Allah SWT. Semoga di hari yang penuh berkah ini, kita diberikan kekuatan dan kesabaran dalam menjalankan ibadah puasa. Mari kita manfaatkan waktu ini untuk semakin mendekatkan diri kepada-Nya, memperbanyak dzikir, membaca Al-Qur'an, serta memperbaiki akhlak kita. Semoga puasa kita diterima dan membawa keberkahan bagi kehidupan kita. Aamiin.";
                   isPlaying = true;
                   imsakAudio.onended = () => { isPlaying = false; };
                 } else if (prayer === "Subuh") {
