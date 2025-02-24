@@ -411,61 +411,74 @@ function toggleAudio(prayerName, timeStr, icon) {
 }
 
 function checkPrayerTime() {
-  setInterval(() => {
-    const now = new Date();
-    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    const currentDay = String(now.getDate()).padStart(2, '0');
-
-    if (currentSchedule.length > 0) {
-      const todaySchedule = currentSchedule.find(day => {
-        const match = day.tanggal.match(/\d+/);
-        return match && match[0] === currentDay;
-      });
-
-      if (todaySchedule) {
-        const prayerTimes = {
-          "Imsak": todaySchedule.imsak,
-          "Subuh": todaySchedule.subuh,
-          "Terbit": todaySchedule.terbit,
-          "Dhuha": todaySchedule.dhuha,
-          "Dzuhur": todaySchedule.dzuhur,
-          "Ashar": todaySchedule.ashar,
-          "Maghrib": todaySchedule.maghrib,
-          "Isya": todaySchedule.isya
-        };
-
-        let currentPrayerName = null;
-
-        for (const [prayer, time] of Object.entries(prayerTimes)) {
-          if (currentTime === time) {
-            currentPrayerName = prayer;
-            break;
-          }
-        }
-
+    setInterval(() => {
+        const now = new Date();
+        const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const currentDay = String(now.getDate()).padStart(2, '0');
         const runningTextDiv = document.getElementById("runningText");
-        if (currentPrayerName && currentPrayerName !== "Terbit" && currentPrayerName !== "Dhuha") {
-          runningTextDiv.innerHTML = `<span>Waktu ${currentPrayerName} Telah Tiba!</span>`;
-          runningTextDiv.style.display = "block";
-          if (lastAzanPrayer !== currentPrayerName && audioAllowed) {
-            let soundUrl = "";
-            if (currentPrayerName.toLowerCase() === "imsak") {
-              soundUrl = "waktuimsaktelahtiba.mp3";
-            } else if (currentPrayerName.toLowerCase() === "subuh") {
-              soundUrl = "adzansubuh.mp3";
-            } else {
-              soundUrl = "semuaadzan.mp3";
+
+        if (currentSchedule.length > 0) {
+            const todaySchedule = currentSchedule.find(day => {
+                const match = day.tanggal.match(/\d+/);
+                return match && match[0] === currentDay;
+            });
+
+            if (todaySchedule) {
+                const prayerTimes = {
+                    "Imsak": todaySchedule.imsak,
+                    "Subuh": todaySchedule.subuh,
+                    "Terbit": todaySchedule.terbit,
+                    "Dhuha": todaySchedule.dhuha,
+                    "Dzuhur": todaySchedule.dzuhur,
+                    "Ashar": todaySchedule.ashar,
+                    "Maghrib": todaySchedule.maghrib,
+                    "Isya": todaySchedule.isya
+                };
+
+                let currentPrayerName = null;
+                for (const [prayer, time] of Object.entries(prayerTimes)) {
+                    if (currentTime === time) {
+                        currentPrayerName = prayer;
+                        break;
+                    }
+                }
+
+                if (currentPrayerName && currentPrayerName !== "Terbit" && currentPrayerName !== "Dhuha") {
+                    let text = "";
+                    if (currentPrayerName === "Imsak") {
+                        text = "Waktu imsak telah tiba, menandakan dimulainya ibadah puasa kita hari ini. Saatnya menahan diri dari makan, minum, serta segala hal yang dapat membatalkan puasa. Namun, lebih dari sekadar menahan lapar dan dahaga, puasa juga mengajarkan kita untuk menjaga lisan, menahan amarah, memperbanyak doa, dan meningkatkan ibadah kepada Allah SWT. Semoga di hari yang penuh berkah ini, kita diberikan kekuatan dan kesabaran dalam menjalankan ibadah puasa. Mari kita manfaatkan waktu ini untuk semakin mendekatkan diri kepada-Nya, memperbanyak dzikir, membaca Al-Qur'an, serta memperbaiki akhlak kita. Semoga puasa kita diterima dan membawa keberkahan bagi kehidupan kita. Aamiin.";
+                    } else {
+                        text = `Waktu ${currentPrayerName} Telah Tiba!`;
+                    }
+                    runningTextDiv.innerHTML = `<span>${text}</span>`;
+                    runningTextDiv.style.display = "block";
+
+                    const span = runningTextDiv.querySelector('span');
+                    const textLength = text.length;
+                    const animationDuration = textLength > 100 ? 30 : 15; // Diperbarui untuk lebih lambat
+                    span.style.animation = `marquee ${animationDuration}s linear infinite`;
+
+                    if (lastAzanPrayer !== currentPrayerName && audioAllowed) {
+                        let soundUrl = "";
+                        if (currentPrayerName.toLowerCase() === "imsak") {
+                            soundUrl = "waktuimsaktelahtiba.mp3";
+                        } else if (currentPrayerName.toLowerCase() === "subuh") {
+                            soundUrl = "adzansubuh.mp3";
+                        } else {
+                            soundUrl = "semuaadzan.mp3";
+                        }
+                        const azanAudio = new Audio(soundUrl);
+                        azanAudio.play().catch(err => console.error("Error memutar audio:", err));
+                        lastAzanPrayer = currentPrayerName;
+                    }
+                } else {
+                    runningTextDiv.innerHTML = "";
+                    runningTextDiv.style.display = "none";
+                    lastAzanPrayer = "";
+                }
             }
-            const azanAudio = new Audio(soundUrl);
-            azanAudio.play().catch(err => console.error("Error memutar audio:", err));
-            lastAzanPrayer = currentPrayerName;
-          }
-        } else {
-          runningTextDiv.innerHTML = "";
-          runningTextDiv.style.display = "none";
-          lastAzanPrayer = "";
         }
-      }
-    }
-  }, 60000); // Cek setiap menit
+    }, 60000); // Cek setiap menit
 }
+
+
